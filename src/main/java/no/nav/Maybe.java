@@ -7,6 +7,13 @@ public interface Maybe<T> {
     boolean isPresent();
     T value();
 
+    static <T> Maybe<T> of(T value) {
+        if (value == null) {
+            return Maybe.None();
+        }
+        return Maybe.Some(value);
+    }
+
     static <T> None<T> None() {
         return new None<>();
     }
@@ -19,7 +26,7 @@ public interface Maybe<T> {
     final class Some<T> implements Maybe<T> {
         private final T value;
 
-        Some(T value) {
+        private Some(T value) {
             this.value = value;
         }
 
@@ -34,6 +41,9 @@ public interface Maybe<T> {
 
     /* we have nothing */
     final class None<T> implements Maybe<T> {
+        private None() {
+        }
+
         @Override
         public boolean isPresent() {
             return false;

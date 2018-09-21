@@ -9,10 +9,12 @@ være ubrukelig (noe som kan argumenteres for på et generelt basis også).
 
 `Maybe.isPresent()` gir `false` dersom typen er `None`, og `true` dersom typen er `Some`.
 
+`Maybe.of(T)` gir et `None` dersom `T` er `null`, og `Some` ellers.
+
 ## Eksempler
 `Maybe<T>` kan for eksempel brukes når man deserialiserer JSON og trenger å gjøre forskjell på
 om et felt ikke er satt (`None`) eller har verdi satt (`Some`). 
-Dersom feltet har `null` som gyldig verdi, og man vil føle seg "trygg", kan man for eksempel bruke `Maybe<Optional<T>>` som type.
+Dersom feltet har `null` som gyldig verdi, og man vil føle seg "trygg", kan man for eksempel bruke `Maybe<Maybe<T>>` som type:
 
 ## Komme i gang
 

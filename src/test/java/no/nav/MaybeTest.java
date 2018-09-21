@@ -6,6 +6,24 @@ import org.junit.Test;
 public class MaybeTest {
 
     @Test
+    public void testThatNullIsNotPresent() {
+        Maybe<String> obj = Maybe.of(null);
+        Assert.assertFalse(obj.isPresent());
+    }
+
+    @Test
+    public void testThatAnythingIsPresent() {
+        Maybe<String> obj = Maybe.of("foo");
+        Assert.assertTrue(obj.isPresent());
+    }
+
+    @Test
+    public void testThatAnythingCanHaveValue() {
+        Maybe<String> obj = Maybe.of("foo");
+        Assert.assertEquals("foo", obj.value());
+    }
+
+    @Test
     public void thatNoneIsNotPresent() {
         Maybe<String> obj = Maybe.None();
         Assert.assertFalse(obj.isPresent());
