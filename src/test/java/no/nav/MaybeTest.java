@@ -20,7 +20,7 @@ public class MaybeTest {
     @Test
     public void testThatAnythingCanHaveValue() {
         Maybe<String> obj = Maybe.of("foo");
-        Assert.assertEquals("foo", obj.value());
+        Assert.assertEquals("foo", obj.getOrThrow());
     }
 
     @Test
@@ -32,7 +32,25 @@ public class MaybeTest {
     @Test(expected = IllegalStateException.class)
     public void thatNoneCannotHaveValue() {
         Maybe<String> obj = Maybe.None();
-        obj.value();
+        obj.getOrThrow();
+    }
+
+    @Test
+    public void thatDefaultValueIsReturned() {
+        Maybe<String> obj = Maybe.None();
+        Assert.assertEquals("foo", obj.getOrElse("foo"));
+    }
+
+    @Test
+    public void thatDefaultValueIsReturnedFromSupplier() {
+        Maybe<String> obj = Maybe.None();
+        Assert.assertEquals("foo", obj.getOrElse(() -> "foo"));
+    }
+
+    @Test
+    public void thatNoneCanBePrinted() {
+        Maybe<String> obj = Maybe.None();
+        Assert.assertEquals("None", obj.toString());
     }
 
     @Test
@@ -44,7 +62,7 @@ public class MaybeTest {
     @Test
     public void thatSomeCanHaveNull() {
         Maybe<String> obj = Maybe.Some(null);
-        Assert.assertNull(obj.value());
+        Assert.assertNull(obj.getOrThrow());
     }
 
     @Test
@@ -56,7 +74,24 @@ public class MaybeTest {
     @Test
     public void thatSomeCanHaveAnything() {
         Maybe<String> obj = Maybe.Some("foo");
-        Assert.assertEquals("foo", obj.value());
+        Assert.assertEquals("foo", obj.getOrThrow());
     }
 
+    @Test
+    public void thatDefaultValueIsNotReturned() {
+        Maybe<String> obj = Maybe.Some("foo");
+        Assert.assertEquals("foo", obj.getOrElse("bar"));
+    }
+
+    @Test
+    public void thatDefaultValueIsNotReturnedFromSupplier() {
+        Maybe<String> obj = Maybe.Some("foo");
+        Assert.assertEquals("foo", obj.getOrElse(() -> "bar"));
+    }
+
+    @Test
+    public void thatSomeCanBePrinted() {
+        Maybe<String> obj = Maybe.Some("foo");
+        Assert.assertEquals("Some{value=foo}", obj.toString());
+    }
 }
