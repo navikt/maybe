@@ -36,7 +36,7 @@ public interface Maybe<T> {
 
     @SuppressWarnings("unchecked")
     static <T> None<T> None() {
-        return (None<T>)None.none;
+        return (None<T>)None.INSTANCE;
     }
 
     static <T> Some<T> Some(T value) {
@@ -84,7 +84,7 @@ public interface Maybe<T> {
 
     /* we have nothing */
     final class None<T> implements Maybe<T> {
-        private static final None none = new None();
+        private static final None INSTANCE = new None();
 
         private None() {
         }
