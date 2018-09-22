@@ -1,5 +1,7 @@
 package no.nav;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /* a type representing a value we may or may not have.
@@ -10,6 +12,20 @@ public interface Maybe<T> {
     T getOrThrow();
     T getOrElse(T defaultValue);
     T getOrElse(Supplier<T> supplier);
+
+    default Maybe<T> orElse(Supplier<Maybe<T>> supplier) {
+        return map(x -> this).getOrElse(supplier);
+    }
+
+    default Maybe<T> filter(Predicate<T> f) {
+        return flatMap(x -> f.test(x) ? this : None());
+    }
+
+    <R> Maybe<R> map(Function<T, R> f);
+
+    default <R> Maybe<R> flatMap(Function<T, Maybe<R>> f) {
+        return map(f).getOrElse(Maybe::None);
+    }
 
     static <T> Maybe<T> of(T value) {
         if (value == null) {
@@ -56,6 +72,11 @@ public interface Maybe<T> {
         }
 
         @Override
+        public <R> Maybe<R> map(Function<T, R> f) {
+            return Maybe.Some(f.apply(value));
+        }
+
+        @Override
         public String toString() {
             return "Some{value=" + value + '}';
         }
@@ -86,6 +107,11 @@ public interface Maybe<T> {
         @Override
         public T getOrElse(Supplier<T> supplier) {
             return supplier.get();
+        }
+
+        @Override
+        public <R> Maybe<R> map(Function<T, R> f) {
+            return Maybe.None();
         }
 
         @Override

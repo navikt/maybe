@@ -54,6 +54,30 @@ public class MaybeTest {
     }
 
     @Test
+    public void thatNoneMapsToNone() {
+        Assert.assertFalse(Maybe.None().map(a -> a).isPresent());
+    }
+
+    @Test
+    public void thatNoneFlatMapsToNone() {
+        Maybe<Integer> obj1 = Maybe.None();
+        Maybe<String> obj2 = obj1.flatMap(a -> Maybe.Some("foo"));
+        Assert.assertFalse(obj2.isPresent());
+    }
+
+    @Test
+    public void thatNoneReturnsElse() {
+        Maybe<String> obj = Maybe.<String>None().orElse(() -> Maybe.Some("foo"));
+        Assert.assertEquals("foo", obj.getOrThrow());
+    }
+
+    @Test
+    public void thatNoneFiltersToNone() {
+        Maybe<String> obj = Maybe.<String>None().filter((o) -> true);
+        Assert.assertFalse(obj.isPresent());
+    }
+
+    @Test
     public void thatSomeWithNullIsPresent() {
         Maybe<String> obj = Maybe.Some(null);
         Assert.assertTrue(obj.isPresent());
@@ -87,6 +111,32 @@ public class MaybeTest {
     public void thatDefaultValueIsNotReturnedFromSupplier() {
         Maybe<String> obj = Maybe.Some("foo");
         Assert.assertEquals("foo", obj.getOrElse(() -> "bar"));
+    }
+
+    @Test
+    public void thatSomeCanBeMapped() {
+        Maybe<String> obj1 = Maybe.Some("foo");
+        Maybe<Integer> obj2 = obj1.map(a -> 5);
+        Assert.assertEquals(5, (int)obj2.getOrThrow());
+    }
+
+    @Test
+    public void thatSomeCanBeMappedToNone() {
+        Maybe<String> obj1 = Maybe.Some("foo");
+        Maybe<Integer> obj2 = obj1.flatMap(a -> Maybe.None());
+        Assert.assertFalse(obj2.isPresent());
+    }
+
+    @Test
+    public void thatSomeDoesNotReturnElse() {
+        Maybe<String> obj = Maybe.Some("foo").orElse(() -> Maybe.Some("bar"));
+        Assert.assertEquals("foo", obj.getOrThrow());
+    }
+
+    @Test
+    public void thatSomeFiltersToNone() {
+        Maybe<String> obj = Maybe.Some("foo").filter("bar"::equals);
+        Assert.assertFalse(obj.isPresent());
     }
 
     @Test
