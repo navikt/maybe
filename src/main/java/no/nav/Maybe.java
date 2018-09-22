@@ -8,7 +8,7 @@ import java.util.function.Supplier;
     it does not indicate whether or not the actual value is null or non-null
  */
 public interface Maybe<T> {
-    boolean isPresent();
+    boolean isNone();
     T getOrThrow();
     T getOrElse(T defaultValue);
     T getOrElse(Supplier<T> supplier);
@@ -52,8 +52,8 @@ public interface Maybe<T> {
         }
 
         @Override
-        public boolean isPresent() {
-            return true;
+        public boolean isNone() {
+            return false;
         }
 
         @Override
@@ -90,8 +90,8 @@ public interface Maybe<T> {
         }
 
         @Override
-        public boolean isPresent() {
-            return false;
+        public boolean isNone() {
+            return true;
         }
 
         @Override

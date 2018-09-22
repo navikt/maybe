@@ -7,7 +7,7 @@ være ubrukelig (noe som kan argumenteres for på et generelt basis også).
 
 `None<T>` angir at man ikke har en verdi, mens `Some<T>` angir at man har _noe_ (kan fortsatt være `null`).
 
-`Maybe.isPresent()` gir `false` dersom typen er `None`, og `true` dersom typen er `Some`.
+`Maybe.isNone()` gir `true` dersom typen er `None`, og `false` dersom typen er `Some`.
 
 `Maybe.of(T)` gir et `None` dersom `T` er `null`, og `Some` ellers.
 
@@ -34,21 +34,24 @@ Dersom feltet har `null` som gyldig verdi, og man vil føle seg "trygg", kan man
 
 ```
 Maybe<String> harIkkeVerdi = Maybe.None();
-Assert.assertFalse(harIkkeVerdi.isPresent());
+Assert.assertTrue(harIkkeVerdi.isNone());
 harIkkeVerdi.getOrThrow(); // throws IllegalStateException
 Assert.assertEquals("foo", harIkkeVerdi.getOrElse("foo"));
 Assert.assertEquals("foo", harIkkeVerdi.getOrElse(() -> "foo"));
 
 Maybe<String> harVerdi = Maybe.Some("foo");
-Assert.assertTrue(harVerdi.isPresent());
+Assert.assertFalse(harVerdi.isNone());
 Assert.assertEquals("foo", harVerdi.getOrThrow());
 Assert.assertEquals("foo", harVerdi.getOrElse("bar"));
 Assert.assertEquals("foo", harVerdi.getOrElse(() -> "bar"));
 
 Maybe<String> erNull = Maybe.Some(null);
-Assert.assertTrue(erNull.isPresent());
+Assert.assertFalse(erNull.isNone());
 Assert.assertNull(erNull.getOrThrow());
 Assert.assertNull(erNull.getOrElse("bar"));
 Assert.assertNull(erNull.getOrElse(() -> "bar"));
+
+Assert.assertTrue(Maybe.of(null).isNone());
+Assert.assertFalse(Maybe.of("foo").isNone());
 
 ```

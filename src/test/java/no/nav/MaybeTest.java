@@ -6,15 +6,15 @@ import org.junit.Test;
 public class MaybeTest {
 
     @Test
-    public void testThatNullIsNotPresent() {
+    public void testThatNullIsNone() {
         Maybe<String> obj = Maybe.of(null);
-        Assert.assertFalse(obj.isPresent());
+        Assert.assertTrue(obj.isNone());
     }
 
     @Test
-    public void testThatAnythingIsPresent() {
+    public void testThatAnythingIsSome() {
         Maybe<String> obj = Maybe.of("foo");
-        Assert.assertTrue(obj.isPresent());
+        Assert.assertFalse(obj.isNone());
     }
 
     @Test
@@ -24,9 +24,9 @@ public class MaybeTest {
     }
 
     @Test
-    public void thatNoneIsNotPresent() {
+    public void thatNoneIsNone() {
         Maybe<String> obj = Maybe.None();
-        Assert.assertFalse(obj.isPresent());
+        Assert.assertTrue(obj.isNone());
     }
 
     @Test(expected = IllegalStateException.class)
@@ -55,14 +55,14 @@ public class MaybeTest {
 
     @Test
     public void thatNoneMapsToNone() {
-        Assert.assertFalse(Maybe.None().map(a -> a).isPresent());
+        Assert.assertTrue(Maybe.None().map(a -> a).isNone());
     }
 
     @Test
     public void thatNoneFlatMapsToNone() {
         Maybe<Integer> obj1 = Maybe.None();
         Maybe<String> obj2 = obj1.flatMap(a -> Maybe.Some("foo"));
-        Assert.assertFalse(obj2.isPresent());
+        Assert.assertTrue(obj2.isNone());
     }
 
     @Test
@@ -74,13 +74,13 @@ public class MaybeTest {
     @Test
     public void thatNoneFiltersToNone() {
         Maybe<String> obj = Maybe.<String>None().filter((o) -> true);
-        Assert.assertFalse(obj.isPresent());
+        Assert.assertTrue(obj.isNone());
     }
 
     @Test
-    public void thatSomeWithNullIsPresent() {
+    public void thatSomeWithNullIsSome() {
         Maybe<String> obj = Maybe.Some(null);
-        Assert.assertTrue(obj.isPresent());
+        Assert.assertFalse(obj.isNone());
     }
 
     @Test
@@ -90,9 +90,9 @@ public class MaybeTest {
     }
 
     @Test
-    public void thatSomeWithAnythingIsPresent() {
+    public void thatSomeWithAnythingIsSome() {
         Maybe<String> obj = Maybe.Some("foo");
-        Assert.assertTrue(obj.isPresent());
+        Assert.assertFalse(obj.isNone());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class MaybeTest {
     public void thatSomeCanBeMappedToNone() {
         Maybe<String> obj1 = Maybe.Some("foo");
         Maybe<Integer> obj2 = obj1.flatMap(a -> Maybe.None());
-        Assert.assertFalse(obj2.isPresent());
+        Assert.assertTrue(obj2.isNone());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class MaybeTest {
     @Test
     public void thatSomeFiltersToNone() {
         Maybe<String> obj = Maybe.Some("foo").filter("bar"::equals);
-        Assert.assertFalse(obj.isPresent());
+        Assert.assertTrue(obj.isNone());
     }
 
     @Test
